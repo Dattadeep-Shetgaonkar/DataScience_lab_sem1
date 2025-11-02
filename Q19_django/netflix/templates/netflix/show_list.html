@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Shows</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #e50914;
+            font-size: 2.5em;
+        }
+        .shows-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .show-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .show-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .show-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .show-type {
+            font-weight: bold;
+            color: #e50914;
+            margin-bottom: 10px;
+        }
+        .show-description {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .show-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .show-details p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Netflix Shows</h1>
+        <div class="shows-grid">
+            {% for show in shows %}
+            <div class="show-card">
+                <div class="show-title">{{ show.title }}</div>
+                <div class="show-type">{{ show.type }}</div>
+                <div class="show-description">{{ show.description|truncatechars:150 }}</div>
+                <div class="show-details">
+                    <p><strong>Rating:</strong> {{ show.rating }}</p>
+                    <p><strong>Release Year:</strong> {{ show.release_year }}</p>
+                    {% if show.country %}
+                    <p><strong>Country:</strong> {{ show.country }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

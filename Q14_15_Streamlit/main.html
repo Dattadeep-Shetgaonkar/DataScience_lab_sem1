@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Course Portal</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; }
+    .navbar { background: #333; color: #fff; padding: 10px 0; display: flex; }
+    .navbar a { color: #fff; text-decoration: none; padding: 14px 20px; display: block; }
+    .navbar a:hover { background: #575757; }
+    .navbar .menu { display: flex; margin-left: 20px; }
+    .content { padding: 20px; }
+    iframe { width: 100%; height: 80vh; border: none; }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="menu">
+      <a href="#" onclick="loadPage('index.html')">Dataset</a>
+      <a href="#" onclick="loadPage('visualization.html')">Visualization</a>
+    </div>
+  </div>
+  <div class="content">
+    <iframe id="mainFrame" style="width:100%;height:80vh;border:none;"></iframe>
+  </div>
+  <script>
+    function loadPage(page) {
+      document.getElementById('mainFrame').src = page;
+    }
+  </script>
+</body>
+</html>

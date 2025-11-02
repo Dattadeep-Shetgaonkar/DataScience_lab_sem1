@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Course Management</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    input { width: 95%; padding: 5px; border: none; }
+    input:focus { outline: 1px solid #264653; background-color: #f9f9f9; }
+    button { margin: 2px; padding: 5px 10px; cursor: pointer; background-color: #e63946; color: white; border: none; }
+    .form-container { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>📚 Course Management</h1>
+
+  <div class="form-container">
+    <h3>Add New Course</h3>
+    <input id="course_name" placeholder="Course Name">
+    <input id="duration" placeholder="Duration">
+    <input id="skills" placeholder="Skills">
+    <button onclick="addCourse()">Add</button>
+  </div>
+
+  <h3>Available Courses</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Course Name</th>
+        <th>Duration</th>
+        <th>Skills</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="courseTable"></tbody>
+  </table>
+
+  <script>
+    const API = "http://127.0.0.1:8000";
+
+    async function loadCourses() {
+      const res = await fetch(API + "/api/courses");
+      const data = await res.json();
+      const tbody = document.getElementById("courseTable");
+      tbody.innerHTML = "";
+      data.data.forEach(course => addRowToTable(course));
+    }
+
+    function addRowToTable(course) {
+      const tbody = document.getElementById("courseTable");
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${course.id}</td>
+        <td><input value="${course['Course Name'] || ''}" onchange="updateCourse(${course.id}, 'Course Name', this.value)"></td>
+        <td><input value="${course['Duration'] || ''}" onchange="updateCourse(${course.id}, 'Duration', this.value)"></td>
+        <td><input value="${course['Skills'] || ''}" onchange="updateCourse(${course.id}, 'Skills', this.value)"></td>
+        <td><button onclick="deleteCourse(${course.id}, this)">Delete</button></td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    async function addCourse() {
+      const course = {
+        "Course Name": document.getElementById("course_name").value,
+        "Duration": document.getElementById("duration").value,
+        "Skills": document.getElementById("skills").value
+      };
+
+      if (!course["Course Name"] || !course["Duration"]) {
+        alert("Please fill at least Course Name and Duration.");
+        return;
+      }
+
+      const res = await fetch(API + "/api/courses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(course)
+      });
+
+      const data = await res.json();
+      addRowToTable(data.data);
+
+      // Clear form
+      document.getElementById("course_name").value = '';
+      document.getElementById("duration").value = '';
+      document.getElementById("skills").value = '';
+    }
+
+    async function updateCourse(id, field, value) {
+      const course = {};
+      course[field] = value;
+      await fetch(API + "/api/courses/" + id, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(course)
+      });
+    }
+
+    async function deleteCourse(id, button) {
+      if (confirm("Are you sure you want to delete this course?")) {
+        await fetch(API + "/api/courses/" + id, { method: "DELETE" });
+        button.closest("tr").remove();
+      }
+    }
+
+    loadCourses();
+  </script>
+</body>
+</html>
+

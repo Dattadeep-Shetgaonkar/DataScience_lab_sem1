@@ -1,0 +1,9 @@
+name,gender,location,salary
+mohan,male,Mumbai,40000
+deep,male,Goa,50000
+Deepa,female,Rajasthan,60000
+ranjita,female,Mumbai,50000
+nothing,male,Goa,35000
+dinesh,male,Goa,30000
+rajani,female,Rajasthan,45000
+rima,female,pune,60000
